@@ -7,7 +7,7 @@ fun main() {
         Passenger("Jack", 12, false, 20.0),
         Passenger("Stephanie", 38, true, 10.0),
         Passenger("Alexander", 25, false, 60.0),
-        Passenger("Rok", 42, true, 100.0),
+        Passenger("Rok", 15, true, 100.0),
         Passenger("Jay", 45, false, 70.0),
         Passenger("Theresa", 52, true, 55.0),
         Passenger("Alex", 55, false, 82.0),
@@ -67,13 +67,61 @@ fun main() {
     println("Passengers with heavy luggage > 25kg : $heavyPassenger")
     println()
 
-    /**
+    /** DOUBLE NULL FILTER
      * Imagine you have a list of "Potential VIPs" (Strings), but some entries are null. You want to find their corresponding Passenger objects.
      */
-    val listOfVIP = listOf<String?>("Alice", null, "Rok", null)
-    listOfVIP.filterNotNull().map { name -> passengers.find { passenger -> passenger.name == name } }.filterNotNull()
+    val listOfVIP = listOf<String?>("Alice", null, "Rok", null,"Theresa")
+    val vips = listOfVIP.filterNotNull().map { name -> passengers.find { passenger -> passenger.name == name } }.filterNotNull()
+    println("Passenger name in both lists : $vips")
+    vips.forEach { index -> println("Ime : ${index.name} \n" +
+            "Starost : ${index.age} \n" +
+            "\n") }
 
-}
+    /** PARTITIONING
+     * The Goal: Split your passengers into those who have Priority Boarding and those who don't.
+     */
+    val(p1, p2) = passengers.partition { passenger -> passenger.hasPriorityBoarding == true }
+    println("Potniki s priority Boardingom : ")
+    p1.forEach { passenger -> println( passenger) }
+    println(p1.count { passenger -> passenger.hasPriorityBoarding == true })
+    println()
+    println("Potniki s navadnim boardingom : ")
+    p2.forEach { passenger -> println( passenger) }
+    println(p2.count { passenger -> passenger.hasPriorityBoarding == false })
+
+    /**
+     * The Goal: The airline wants to see passengers grouped by their life stage:
+     * "Minor": age < 18
+     * "Senior": age > 60
+     * "Adult": everyone else
+     * fter you create the map, try to print just the "Seniors" from that map using ageMap["Senior"]. Remember to use ?. because that category might be empty!r
+     */
+
+    println()
+    val lifeStage = passengers.groupBy { passenger ->
+            if (passenger.age < 18)  "Minor"
+            else if (passenger.age > 60)  "Senior"
+            else  "Adult"
+        }
+
+    val ageMap = lifeStage.get("Senior")?.filterNotNull()
+
+    /** .any
+     * The Task: Check if the "Minor" group has any passengers who have Priority Boarding.
+     */
+    val minorPriority = lifeStage["Minor"]?.any { passenger -> passenger.hasPriorityBoarding } ?: false
+    println(minorPriority)
+
+    }
+
+
+
+
+
+
+
+
+
 
 
 data class Passenger(val name:String, val age:Int, val hasPriorityBoarding:Boolean, val luggageWeight:Double) {
