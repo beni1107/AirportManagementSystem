@@ -112,6 +112,28 @@ fun main() {
     val minorPriority = lifeStage["Minor"]?.any { passenger -> passenger.hasPriorityBoarding } ?: false
     println(minorPriority)
 
+    passengers.firstOrNull{passenger -> passenger.age < 18}
+    ?.let { passenger -> println("name of passenger : ${passenger.name}") }?: "No name found"
+
+
+    /**
+     * Find the passenger with the most luggage and tell us their name.
+     */
+    
+    val nameofmax = passengers.maxByOrNull { passenger -> passenger.luggageWeight }
+        ?.let { println("Heavy lifter is : $it") } ?: "No name found"
+
+    /**
+     * The airline wants to know the total weight of luggage for only the passengers whose names start with the letter 'A'.
+     */
+
+     val pAweight = passengers.filter { passenger -> passenger.name.startsWith("A") }.sumOf { passenger -> passenger.luggageWeight }
+        println(pAweight)
+
+
+
+
+
     }
 
 
